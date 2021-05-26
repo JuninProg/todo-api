@@ -13,13 +13,16 @@
     "@nestjs/common": "^7.6.17",
     "@nestjs/core": "^7.6.17",
     "@nestjs/platform-express": "^7.6.17",
+    "@nestjs/typeorm": "^7.1.5",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.2.5",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.6.7"
+    "rxjs": "^6.6.7",
+    "typeorm": "^0.2.32"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

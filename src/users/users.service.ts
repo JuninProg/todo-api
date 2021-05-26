@@ -1,33 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { HashService } from '../providers/hash.service';
 import { CreateUserDTO } from './dto/create-user.dto';
-import { IUser } from './interfaces/user.interface';
+import { User } from './users.entity';
+
+const ADMIN_USER_EMAIL = process.env.ADMIN_USER_EMAIL as string;
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly hashService: HashService) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+    private readonly hashService: HashService
+  ) {}
 
-  private users: IUser[] = [];
+  async create(data: CreateUserDTO): Promise<Pick<User, 'id'>> {
+    const userFound = await this.usersRepository.findOne({
+      where: { email: data.email },
+    });
 
-  async create(data: CreateUserDTO): Promise<IUser> {
-    const id = Math.floor(Math.random() * 1000000);
-    const newUser: IUser = {
-      id,
+    if (userFound || data.email === ADMIN_USER_EMAIL)
+      throw new HttpException(
+        `Email in use by another user: ${data.email}`,
+        HttpStatus.BAD_REQUEST
+      );
+
+    const passwordHash = await this.hashService.genHash(data.password);
+
+    const {
+      identifiers: [identifier],
+    } = await this.usersRepository.insert({
       email: data.email,
-      password: await this.hashService.genHash(data.password),
-    };
-    this.users.push(newUser);
-    return newUser;
+      password: passwordHash,
+    });
+
+    return { id: identifier.id };
   }
 
-  async findByEmail(email: string): Promise<IUser | null> {
-    const userFound = this.users.find((user) => user.email === email);
+  async findByEmail(email: string): Promise<User | null> {
+    const userFound = await this.usersRepository.findOne({ where: { email } });
 
     return userFound ? userFound : null;
   }
 
-  async findById(id: number): Promise<IUser | null> {
-    const userFound = this.users.find((user) => user.id === id);
+  async findById(id: number): Promise<User | null> {
+    const userFound = await this.usersRepository.findOne({ where: { id } });
 
     return userFound ? userFound : null;
   }

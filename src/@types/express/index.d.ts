@@ -1,9 +1,9 @@
-import { IUser } from '../../users/interfaces/user.interface';
+import { ITokenPayload } from '../../auth/interfaces/token-payload.interface';
 
 declare global {
   namespace Express {
     interface Request {
-      user: Pick<IUser, 'id' | 'email'>;
+      user: ITokenPayload;
     }
   }
 }

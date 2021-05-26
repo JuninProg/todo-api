@@ -4,6 +4,10 @@ import { LoginDTO } from './dto/login.dto';
 import { HashService } from '../providers/hash.service';
 import { IAccessToken } from './interfaces/access-token.interface';
 import { TokenService } from '../providers/token.service';
+import { IRoles } from './interfaces/token-payload.interface';
+
+const ADMIN_USER_EMAIL = process.env.ADMIN_USER_EMAIL as string;
+const ADMIN_USER_PASSWORD = process.env.ADMIN_USER_PASSWORD as string;
 
 @Injectable()
 export class AuthService {
@@ -14,22 +18,36 @@ export class AuthService {
   ) {}
 
   async signIn(data: LoginDTO): Promise<IAccessToken> {
-    const userFound = await this.usersService.findByEmail(data.email);
     if (
-      userFound &&
-      (await this.hashService.compareHash(data.password, userFound.password))
+      data.email === ADMIN_USER_EMAIL &&
+      data.password === ADMIN_USER_PASSWORD
     ) {
       return {
         token: await this.tokenService.signToken({
-          id: userFound.id,
-          email: userFound.email,
+          id: null,
+          email: data.email,
+          role: IRoles['admin'],
         }),
       };
     } else {
-      throw new HttpException(
-        'Invalid email or password.',
-        HttpStatus.UNAUTHORIZED
-      );
+      const userFound = await this.usersService.findByEmail(data.email);
+      if (
+        userFound &&
+        (await this.hashService.compareHash(data.password, userFound.password))
+      ) {
+        return {
+          token: await this.tokenService.signToken({
+            id: userFound.id,
+            email: userFound.email,
+            role: IRoles['user'],
+          }),
+        };
+      } else {
+        throw new HttpException(
+          'Invalid email or password.',
+          HttpStatus.UNAUTHORIZED
+        );
+      }
     }
   }
 }

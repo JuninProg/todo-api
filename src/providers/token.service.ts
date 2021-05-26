@@ -13,7 +13,10 @@ const JWT_EXPIRES_TIME_IN_MS = process.env.JWT_EXPIRES_TIME_IN_MS
 
 @Injectable()
 export class TokenService {
-  signToken(payload: object, expiresInMs?: number): Promise<string> {
+  signToken(
+    payload: Record<string, unknown>,
+    expiresInMs?: number
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       jwt.sign(
         payload,
