@@ -5,11 +5,12 @@ API feita em NestJs para administrar tarefas a fazer. Usa Mysql como banco de da
 ## Como instalar?
 
 1. Crie uma instância do Mysql;
-2. Copie o repositório;
-3. Rode `npm install` para instalar as dependências;
-4. Copie o `.env.example` para o arquivo `.env` e popule os dados;
-5. Se for usar em desenvolvimento rode: `npm run dev`;
-6. Se for usar em produção rode: `npx tsc` e `npm run prod`.
+2. Rode as migrations que podem ser encontradas em `./src/migrations/todo_db.sql`;
+3. Copie o repositório;
+4. Rode `npm install` para instalar as dependências;
+5. Copie o `.env.example` para o arquivo `.env` e popule os dados;
+6. Se for usar em desenvolvimento rode: `npm run dev`;
+7. Se for usar em produção rode: `npx tsc` e `npm run prod`.
 
 ## Rotas
 
