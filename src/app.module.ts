@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './components/auth/auth.module';
 import { ProvidersModule } from './providers/providers.module';
-import { Todo } from './todo/todo.entity';
-import { TodoModule } from './todo/todo.module';
-import { User } from './users/users.entity';
-import { UsersModule } from './users/users.module';
+import { Todo } from './components/todo/todo.entity';
+import { TodoModule } from './components/todo/todo.module';
+import { User } from './components/users/users.entity';
+import { UsersModule } from './components/users/users.module';
 
 const DEFAULT_DB_HOST = 'localhost';
 const DEFAULT_DB_PORT = 3306;

@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { LoginDTO } from './dto/login.dto';
-import { HashService } from '../providers/hash.service';
+import { HashService } from '../../providers/hash.service';
 import { IAccessToken } from './interfaces/access-token.interface';
-import { TokenService } from '../providers/token.service';
+import { TokenService } from '../../providers/token.service';
 import { IRoles } from './interfaces/token-payload.interface';
 
 const ADMIN_USER_EMAIL = process.env.ADMIN_USER_EMAIL as string;

@@ -168,34 +168,22 @@ export class TodoService {
     userRole: IRoles,
     data: ListTodosDTO
   ): Promise<{ todos: IListTodo[] }> {
-    if (data.afterId && !data.limit)
-      throw new HttpException(
-        `When afterId is defined, limit must be defined.`,
-        HttpStatus.BAD_REQUEST
-      );
-
-    if (data.limit && !data.afterId)
-      throw new HttpException(
-        `When limit is defined, afterId must be defined.`,
-        HttpStatus.BAD_REQUEST
-      );
-
     if (userRole === IRoles['user'] && !userId)
       throw new HttpException(`Invalid user.`, HttpStatus.BAD_REQUEST);
 
     const selectTodosQuery = this.todoRepository
       .createQueryBuilder('todo')
-      .innerJoinAndSelect(User, 'user');
+      .innerJoinAndSelect(User, 'user', 'user.id = todo.user_id');
 
     if (userRole === IRoles['user'])
       selectTodosQuery.where('user.id = :userId', { userId });
 
-    if (data.afterId && data.limit)
-      selectTodosQuery
-        .andWhere('todo.id > :afterId', {
-          afterId: data.afterId,
-        })
-        .limit(data.limit);
+    if (data.afterId)
+      selectTodosQuery.andWhere('todo.id > :afterId', {
+        afterId: data.afterId,
+      });
+
+    if (data.limit) selectTodosQuery.limit(data.limit);
 
     const results = await selectTodosQuery.execute();
     const now = Date.now();
@@ -210,7 +198,11 @@ export class TodoService {
         updatedAt: result.todo_updated_at,
         userId: result.todo_user_id,
         userEmail: result.user_email,
-        isLate: new Date(result.todo_delivery_at).getTime() < now,
+        isLate: result.todo_completed_at
+          ? false
+          : new Date(result.todo_delivery_at).getTime() < now
+          ? true
+          : false,
       })
     );
 
