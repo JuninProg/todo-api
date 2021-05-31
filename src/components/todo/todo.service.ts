@@ -10,8 +10,6 @@ import { UpdateTodoDTO } from './dto/update-todo.dto';
 import { IListTodo } from './interfaces/list-todos.interface';
 import { Todo } from './todo.entity';
 
-const DELIVERY_AT_DIFF_TIME = 0;
-
 @Injectable()
 export class TodoService {
   constructor(
@@ -40,14 +38,6 @@ export class TodoService {
       );
 
     const deliveryAt = new Date(data.deliveryAt);
-    const diff = deliveryAt.getTime() - Date.now();
-
-    if (diff < DELIVERY_AT_DIFF_TIME)
-      throw new HttpException(
-        `Devilery date must be equal or greater than today: ${data.deliveryAt}.`,
-        HttpStatus.BAD_REQUEST
-      );
-
     const createdAt = new Date();
 
     const {
@@ -134,21 +124,10 @@ export class TodoService {
         HttpStatus.BAD_REQUEST
       );
 
-    let deliveryAt;
-
-    if (data.deliveryAt) {
-      deliveryAt = new Date(data.deliveryAt);
-      const diff = deliveryAt.getTime() - Date.now();
-
-      if (diff < DELIVERY_AT_DIFF_TIME)
-        throw new HttpException(
-          `Devilery date must be equal or greater than today: ${data.deliveryAt}.`,
-          HttpStatus.BAD_REQUEST
-        );
-    }
-
     const description = data.description || todoFound.description;
-    deliveryAt = deliveryAt || todoFound.deliveryAt;
+    const deliveryAt = data.deliveryAt
+      ? new Date(data.deliveryAt)
+      : todoFound.deliveryAt;
     const updatedAt = new Date();
 
     await this.todoRepository.update(
