@@ -177,11 +177,12 @@ export class TodoService {
         updatedAt: result.todo_updated_at,
         userId: result.todo_user_id,
         userEmail: result.user_email,
-        isLate: result.todo_completed_at
-          ? false
-          : new Date(result.todo_delivery_at).getTime() < now
-          ? true
-          : false,
+        isLate:
+          result.todo_completed_at !== null
+            ? false
+            : new Date(result.todo_delivery_at).getTime() < now
+            ? true
+            : false,
       })
     );
 
