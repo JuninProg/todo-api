@@ -1,7 +1,6 @@
 SET NAMES utf8;
 SET time_zone = '+00:00';
 
-CREATE DATABASE `todo_db`;
 USE `todo_db`;
 
 CREATE TABLE `user` (
@@ -21,5 +20,5 @@ CREATE TABLE `todo` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_todo_user` (`user_id`),
-  CONSTRAINT `fk_todo_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_todo_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT COLLATE=utf8mb4_unicode_ci DEFAULT CHARSET=utf8mb4;

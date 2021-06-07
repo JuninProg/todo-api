@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  todo-api-db:
+    container_name: todo-api-db
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: '${DB_NAME}'
+      MYSQL_USER: '${DB_USER}'
+      MYSQL_PASSWORD: '${DB_PASS}'
+      MYSQL_ROOT_PASSWORD: '${DB_PASS}'
+    ports:
+      - '${DB_PORT}:3306'
+    volumes:
+      - ./src/migrations/todo_db.sql:/docker-entrypoint-initdb.d/1-setup.sql
+      - todo-api-db:/var/lib/mysql
+    networks:
+      - todo-api-network
+volumes:
+  todo-api-db:
+    name: todo-api-db
+networks:
+  todo-api-network:
+    name: todo-api-network
+    driver: bridge

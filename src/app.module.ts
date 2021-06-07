@@ -21,8 +21,6 @@ const DB_PASS = process.env.DB_PASS || DEFAULT_DB_PASS;
 const DB_NAME = process.env.DB_NAME || DEFAULT_DB_NAME;
 const DB_USER = process.env.DB_USER || DEFAULT_DB_USER;
 
-const NODE_ENV = process.env.NODE_ENV || 'development';
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -33,7 +31,6 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
       password: DB_PASS,
       database: DB_NAME,
       entities: [User, Todo],
-      synchronize: NODE_ENV === 'development' ? true : false,
     }),
     AuthModule,
     UsersModule,
