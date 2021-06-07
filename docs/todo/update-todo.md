@@ -6,10 +6,10 @@ O usuário só pode atualizar as suas tarefas. O administrador não pode atualiz
 
 ## Corpo da Requisição
 
-| PROPRIEDADE   | TIPO     | OBRIGATÓRIO | DESCRIÇÃO                                                                             |
-| ------------- | -------- | :---------: | ------------------------------------------------------------------------------------- |
-| `description` | `string` |             | Descrição da tarefa.                                                                  |
-| `deliveryAt`  | `string` |             | Data de entrega da tarefa. Deve seguir o seguinte format: `2021-05-31T20:56:00.000Z`. |
+| PROPRIEDADE   | TIPO     | OBRIGATÓRIO | DESCRIÇÃO                                                                              |
+| ------------- | -------- | :---------: | -------------------------------------------------------------------------------------- |
+| `description` | `string` |             | Descrição da tarefa.                                                                   |
+| `deliveryAt`  | `string` |             | Data de entrega da tarefa. Deve seguir o seguinte formato: `2021-05-31T20:56:00.000Z`. |
 
 ## Exemplo de requisição
 
